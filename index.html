@@ -22,14 +22,14 @@
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
-            background-color: #141414;
+            background-color: #1a1a1a;
             color: #fff;
         }
         #input-container {
             display: flex;
             align-items: center;
             padding: 10px;
-            border-bottom: 1px solid #1a1a1a; /* Adjust border color to match background */
+            border-bottom: 1px solid #141414; /* Adjust border color to match background */
         }
         #prompt {
             margin-right: 5px;
@@ -123,21 +123,21 @@
             popup.style.display = 'block';
         };
 
+        function showInfoPopup() {
+            infoPopup.style.display = 'block'; // Show the info popup
+        }
+
         yesBtn.addEventListener('click', function() {
             backgroundAudio.play();
             popup.style.display = 'none'; // Hide the popup
-            // Show the info popup after the audio ends
-            backgroundAudio.onended = function() {
-                infoPopup.style.display = 'block'; // Show the info popup
-            };
+            // Ensure the info popup is shown after the audio ends
+            backgroundAudio.onended = showInfoPopup;
         });
 
         noBtn.addEventListener('click', function() {
             popup.style.display = 'none'; // Hide the popup
-            // Show the info popup after the audio ends
-            backgroundAudio.onended = function() {
-                infoPopup.style.display = 'block'; // Show the info popup
-            };
+            // Ensure the info popup is shown after the audio ends
+            backgroundAudio.onended = showInfoPopup;
         });
 
         understandBtn.addEventListener('click', function() {
