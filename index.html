@@ -35,7 +35,6 @@
             margin-right: 5px;
             animation: blink 1s step-start infinite;
             color: #fff; /* White color for the prompt */
-            /* Remove the underline effect */
             border: none; /* Remove any border */
             padding-bottom: 0; /* Remove padding if it was adding space */
         }
@@ -61,7 +60,7 @@
             }
         }
         /* Styles for the popup */
-        #popup {
+        #popup, #info-popup {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -73,8 +72,9 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             z-index: 1000; /* Ensure the popup is above other content */
             text-align: center; /* Center text inside the popup */
+            display: none; /* Initially hidden */
         }
-        #popup button {
+        #popup button, #info-popup button {
             margin: 10px;
             padding: 10px 20px;
             border: 2px dotted #fff; /* White dotted border around buttons */
@@ -83,10 +83,7 @@
             color: #fff;
             cursor: pointer;
         }
-        #popup #yes-btn {
-            border-color: #fff;
-        }
-        #popup #no-btn {
+        #info-popup button {
             border-color: #fff;
         }
     </style>
@@ -96,6 +93,11 @@
         <p>Open your ears or keep them closed?</p>
         <button id="yes-btn">Open your ears</button>
         <button id="no-btn">Keep them closed</button>
+    </div>
+
+    <div id="info-popup">
+        <p>Write 'help' into the terminal for basic commands</p>
+        <button id="understand-btn">I understand</button>
     </div>
 
     <audio id="background-audio" loop>
@@ -113,11 +115,13 @@
 
     <script>
         const popup = document.getElementById('popup');
+        const infoPopup = document.getElementById('info-popup');
         const yesBtn = document.getElementById('yes-btn');
         const noBtn = document.getElementById('no-btn');
+        const understandBtn = document.getElementById('understand-btn');
         const backgroundAudio = document.getElementById('background-audio');
 
-        // Show the popup when the page loads
+        // Show the initial popup when the page loads
         window.onload = function() {
             popup.style.display = 'block';
         };
@@ -125,10 +129,22 @@
         yesBtn.addEventListener('click', function() {
             backgroundAudio.play();
             popup.style.display = 'none'; // Hide the popup
+            // Listen for the end of the audio to show the info popup
+            backgroundAudio.onended = function() {
+                infoPopup.style.display = 'block'; // Show the info popup
+            };
         });
 
         noBtn.addEventListener('click', function() {
             popup.style.display = 'none'; // Hide the popup
+            // Listen for the end of the audio to show the info popup
+            backgroundAudio.onended = function() {
+                infoPopup.style.display = 'block'; // Show the info popup
+            };
+        });
+
+        understandBtn.addEventListener('click', function() {
+            infoPopup.style.display = 'none'; // Hide the info popup
         });
 
         const inputField = document.getElementById('input');
@@ -142,23 +158,27 @@
             }
         });
 
-        function handleCommand(command) {
-            const output = document.createElement('div');
-            output.textContent = `> ${command}`;
-            outputDiv.appendChild(output);
+function handleCommand(command) {
+    const output = document.createElement('div');
+    output.textContent = `> ${command}`;
+    outputDiv.appendChild(output);
 
-            // Example command
-            if (command.trim().toLowerCase() === 'hewhosings') {
-                window.location.href = 'https://377urjubfvatf.github.io/773-axatlltgz.html';
-            } else {
-                const error = document.createElement('div');
-                error.textContent = 'Unrecognized Cipher';
-                outputDiv.appendChild(error);
-            }
+    // Handle commands
+    if (command.trim().toLowerCase() === 'hewhosings') {
+        window.location.href = 'https://377urjubfvatf.github.io/773-axatlltgz.html';
+    } else if (command.trim().toLowerCase() === 'help') {
+        const helpMessage = document.createElement('div');
+        helpMessage.textContent = 'Something in the system is encrypted, the password should decrypt it.';
+        outputDiv.appendChild(helpMessage);
+    } else {
+        const error = document.createElement('div');
+        error.textContent = 'Unrecognized Cipher';
+        outputDiv.appendChild(error);
+    }
 
-            // Scroll to bottom
-            outputDiv.scrollTop = outputDiv.scrollHeight;
-        }
+    // Scroll to bottom
+    outputDiv.scrollTop = outputDiv.scrollHeight;
+}
     </script>
 </body>
 </html>
