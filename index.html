@@ -1,1 +1,99 @@
-asd
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="icon" type="image/x-icon" href="favicon.png">
+    <title>Terminal</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+            font-family: monospace;
+        }
+        #terminal {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            background-color: #000;
+            color: #fff;
+        }
+        #input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #000; /* Adjust border color to match background */
+        }
+        #prompt {
+            margin-right: 5px;
+            animation: blink 1s step-start infinite;
+        }
+        #input {
+            border: none;
+            background: none;
+            color: #fff;
+            width: 100%;
+            font-size: 1em;
+            outline: none;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        #output {
+            flex: 1;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <div id="input-container">
+            <div id="prompt">></div>
+            <input type="text" id="input" autocomplete="off" autofocus>
+        </div>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        const inputField = document.getElementById('input');
+        const outputDiv = document.getElementById('output');
+
+        inputField.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleCommand(inputField.value);
+                inputField.value = '';
+            }
+        });
+
+        function handleCommand(command) {
+            const output = document.createElement('div');
+            output.textContent = `> ${command}`;
+            outputDiv.appendChild(output);
+
+            // Example command
+            if (command.trim().toLowerCase() === 'hewhosings') {
+                window.location.href = 'https://377-cnffjbeq-urjubfvatf.neocities.org/773-axatlltgz';
+            } else {
+                const error = document.createElement('div');
+                error.textContent = 'Unrecognized Cipher';
+                outputDiv.appendChild(error);
+            }
+
+            // Scroll to bottom
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
