@@ -12,7 +12,7 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background-color: #000;
+            background-color: #000; /* Background color of the body */
             color: #fff;
             font-family: monospace;
         }
@@ -62,8 +62,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #fff;
-            color: #000;
+            background-color: #333; /* Dark grey background for the popup */
+            color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -73,17 +73,17 @@
         #popup button {
             margin: 10px;
             padding: 10px 20px;
-            border: none;
+            border: 2px dotted #fff; /* White dotted border around buttons */
             border-radius: 4px;
+            background-color: #333; /* Match button background with popup */
+            color: #fff;
             cursor: pointer;
         }
         #popup #yes-btn {
-            background-color: #4CAF50;
-            color: white;
+            border-color: #fff;
         }
         #popup #no-btn {
-            background-color: #f44336;
-            color: white;
+            border-color: #fff;
         }
     </style>
 </head>
