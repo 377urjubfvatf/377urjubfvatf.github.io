@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="icon" type="image/x-icon" href="favico.png">
-    <audio autoplay loop>
-        <source src="https://377urjubfvatf.github.io/howling-wind-109590.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <link rel="icon" type="image/x-icon" href="favico.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terminal</title>
@@ -60,9 +56,27 @@
                 opacity: 0;
             }
         }
+        #play-audio-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #444;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1000; /* Ensure the button is above other content */
+        }
     </style>
 </head>
 <body>
+    <button id="play-audio-btn">Play Music</button>
+
+    <audio id="background-audio" loop>
+        <source src="https://377urjubfvatf.github.io/howling-wind-109590.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <div id="terminal">
         <div id="input-container">
             <div id="prompt">></div>
@@ -74,6 +88,14 @@
     <script>
         const inputField = document.getElementById('input');
         const outputDiv = document.getElementById('output');
+        const playAudioBtn = document.getElementById('play-audio-btn');
+        const backgroundAudio = document.getElementById('background-audio');
+
+        // Add event listener to the button
+        playAudioBtn.addEventListener('click', function() {
+            backgroundAudio.play();
+            playAudioBtn.style.display = 'none'; // Hide the button after audio starts
+        });
 
         inputField.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
