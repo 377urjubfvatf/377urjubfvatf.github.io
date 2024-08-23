@@ -4,12 +4,6 @@
     <link rel="icon" type="image/x-icon" href="favico.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <!DOCTYPE html>
-<html>
-<head>
-    <link rel="icon" type="image/x-icon" href="favico.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terminal</title>
     <style>
         body {
@@ -41,8 +35,9 @@
             margin-right: 5px;
             animation: blink 1s step-start infinite;
             color: #fff; /* White color for the prompt */
-            border-bottom: 2px solid #fff; /* White underline for the prompt */
-            padding-bottom: 2px; /* Padding to ensure space for the underline */
+            /* Remove the underline effect */
+            border: none; /* Remove any border */
+            padding-bottom: 0; /* Remove padding if it was adding space */
         }
         #input {
             border: none;
