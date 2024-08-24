@@ -1,1 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Chatbot</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
 
+        .chatbox {
+            border-radius: 12px;
+            width: 600px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            height: 800px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .chatlog {
+            padding: 16px;
+            flex: 1;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        input {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 12px;
+            width: calc(100% - 100px);
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            border: none;
+            padding: 12px;
+            width: 80px;
+            background-color: #0288d1;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #0277bd;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            max-width: 90%;
+            word-wrap: break-word;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .user {
+            background-color: #b3e5fc;
+            color: #01579b;
+            align-self: flex-end;
+        }
+
+        .bot {
+            background-color: #f1f8e9;
+            color: #424242;
+            align-self: flex-start;
+        }
+
+        .typing-indicator {
+            font-style: italic;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .suggestions {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background-color: #f1f1f1;
+        }
+
+        .suggestion-button {
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .suggestion-button:hover {
+            background-color: #d4d4d4;
+        }
+
+        .error-message {
+            color: red;
+        }
+
+        .info-message {
+            color: #00796b;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbox">
+        <div id="chatlog" class="chatlog">
+            <div class="message bot welcome-message">Hello! How can I assist you today?</div>
+        </div>
+        <div style="display: flex; padding: 10px;">
+            <input type="text" id="userinput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+        <div id="suggestions" class="suggestions"></div>
+    </div>
+    <script>
+        const chatLog = document.getElementById('chatlog');
+        const suggestionsDiv = document.getElementById('suggestions');
+
+        let userData = {};
+        let history = [];
+
+        async function sendMessage() {
+            const userInput = document.getElementById('userinput').value.trim();
+            if (userInput === '') {
+                alert('Please enter a message.');
+                return;
+            }
+
+            addMessage('user', 'You', userInput);
+            document.getElementById('userinput').value = '';
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            showTypingIndicator();
+
+            try {
+                const response = await getAdvancedResponse(userInput);
+                addMessage('bot', 'Bot', response);
+            } catch (error) {
+                addMessage('bot', 'Bot', 'Sorry, something went wrong.');
+            }
+            chatLog.scrollTop = chatLog.scrollHeight;
+            hideTypingIndicator();
+            suggestInputs();
+        }
+
+        function addMessage(type, sender, text) {
+            const message = { type, sender, text };
+            history.push(message);
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${type}`;
+            msgDiv.textContent = `${sender}: ${text}`;
+            chatLog.appendChild(msgDiv);
+        }
+
+        async function getAdvancedResponse(text) {
+            const lowerText = text.toLowerCase();
+
+            // Responses from predefined responses
+            const responses = {
+                'hello': 'Hi there! How can I help?',
+                'hi': 'Hello! What can I do for you?',
+                'how are you': 'I’m just a bot, but I’m functioning well!',
+                'goodbye': 'Farewell! Have a great day!',
+                'bye': 'See you later!',
+                'name': 'I’m a chatbot here to assist you.',
+                'purpose': 'I’m here to provide information and help with your questions.',
+                'help': 'Sure! What do you need help with?',
+                'weather': await getWeather(),
+                'joke': await getJoke(),
+                'age': 'I don’t have an age, but I’m always learning.',
+                'news': await getNews(),
+                'quote': await getQuote(),
+                'translate': await getTranslation(text),
+                'fact': await getFact(),
+                'recipe': await getRecipe(),
+                'music': await getMusicRecommendation(),
+                'travel': await getTravelInfo(),
+                'book': await getBookRecommendation(),
+                'movie': await getMovieRecommendation(),
+                'homework': 'I can help with some homework questions. What do you need help with?',
+                'definition': await getDefinition(text),
+                'calculator': await calculate(text)
+            };
+
+            for (let key in responses) {
+                if (lowerText.includes(key)) {
+                    return responses[key];
+                }
+            }
+
+            return 'I’m not sure about that. Can you try asking something else?';
+        }
+
+        async function getDefinition(word) {
+            // Fetch word definition from a free dictionary API
+            try {
+                const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                const data = await response.json();
+                if (data[0] && data[0].meanings[0] && data[0].meanings[0].definitions[0]) {
+                    return `Definition of ${word}: ${data[0].meanings[0].definitions[0].definition}`;
+                } else {
+                    return `No definition found for ${word}.`;
+                }
+            } catch {
+                return 'Unable to fetch definition.';
+            }
+        }
+
+        async function getWeather() {
+            // Fetch weather data from a free API
+            try {
+                const response = await fetch('https://api.weatherapi.com/v1/current.json?key=YOUR_API_KEY&q=London');
+                const data = await response.json();
+                return `Current weather in ${data.location.name}: ${data.current.temp_c}°C, ${data.current.condition.text}.`;
+            } catch {
+                return 'Unable to fetch weather data.';
+            }
+        }
+
+        async function getJoke() {
+            // Fetch joke from a free API
+            try {
+                const response = await fetch('https://official-joke-api.appspot.com/random_joke');
+                const data = await response.json();
+                return `${data.setup} - ${data.punchline}`;
+            } catch {
+                return 'Unable to fetch joke.';
+            }
+        }
+
+        async function getNews() {
+            // Fetch news headlines from a free API
+            try {
+                const response = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=YOUR_API_KEY');
+                const data = await response.json();
+                return `Top headline: ${data.articles[0].title}`;
+            } catch {
+                return 'Unable to fetch news.';
+            }
+        }
+
+        async function getQuote() {
+            // Fetch quote from a free API
+            try {
+                const response = await fetch('https://api.quotable.io/random');
+                const data = await response.json();
+                return `"${data.content}" - ${data.author}`;
+            } catch {
+                return 'Unable to fetch quote.';
+            }
+        }
+
+        async function getTranslation(text) {
+            // Use a translation API to translate the text
+            try {
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|es`);
+                const data = await response.json();
+                return `Translation: ${data.responseData.translatedText}`;
+            } catch {
+                return 'Unable to fetch translation.';
+            }
+        }
+
+        async function getFact() {
+            // Fetch fact from a free API
+            try {
+                const response = await fetch('https://uselessfacts.jsph.pl/random.json?language=en');
+                const data = await response.json();
+                return `Fact: ${data.text}`;
+            } catch {
+                return 'Unable to fetch fact.';
+            }
+        }
+
+        async function getRecipe() {
+            // Fetch recipe from a free API
+            try {
+                const response = await fetch('https://api.edamam.com/search?q=pasta&app_id=YOUR_APP_ID&app_key=YOUR_APP_KEY');
+                const data = await response.json();
+                return `Recipe: ${data.hits[0].recipe.label}`;
+            } catch {
+                return 'Unable to fetch recipe.';
+            }
+        }
+
+        async function getMusicRecommendation() {
+            // Placeholder for music recommendations
+            return 'Try listening to "Shape of You" by Ed Sheeran!';
+        }
+
+        async function getTravelInfo() {
+            // Placeholder for travel information
+            return 'How about a trip to Paris?';
+        }
+
+        async function getBookRecommendation() {
+            // Placeholder for book recommendations
+            return 'Try reading "To Kill a Mockingbird" by Harper Lee.';
+        }
+
+        async function getMovieRecommendation() {
+            // Placeholder for movie recommendations
+            return 'How about watching "Inception"?';
+        }
+
+        async function calculate(text) {
+            // Evaluate simple mathematical expressions
+            try {
+                const result = eval(text);
+                return `Result: ${result}`;
+            } catch {
+                return 'Unable to perform calculation.';
+            }
+        }
+
+        function showTypingIndicator() {
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'message typing-indicator';
+            typingIndicator.textContent = 'Bot is typing...';
+            chatLog.appendChild(typingIndicator);
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.querySelector('.typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function suggestInputs() {
+            suggestionsDiv.innerHTML = '';
+            const suggestions = [
+                'hello', 'how are you', 'bye', 'your name', 'help', 'weather', 'joke',
+                'age', 'news', 'calculate', 'ask something', 'history', 'feedback', 
+                'search', 'reminder', 'music', 'update', 'translate', 'story', 
+                'advice', 'tips', 'facts', 'fun fact', 'trivia', 'quote', 'tip', 
+                'recipe', 'workout', 'travel', 'movie', 'book', 'game', 'homework', 
+                'definition', 'contact', 'date', 'timezone'
+            ];
+            suggestions.forEach(suggestion => {
+                const button = document.createElement('button');
+                button.className = 'suggestion-button';
+                button.textContent = suggestion;
+                button.onclick = () => {
+                    document.getElementById('userinput').value = suggestion;
+                    sendMessage();
+                };
+                suggestionsDiv.appendChild(button);
+            });
+        }
+    </script>
+</body>
+</html>
