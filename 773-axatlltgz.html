@@ -1,1 +1,69 @@
-you win!
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="favico.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-Interactable Box</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background-color: #000; /* Background color of the body */
+            color: #fff;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Styles for the non-interactable box */
+        #non-interactable-box {
+            background-color: #333; /* Dark grey background to match popups */
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center; /* Center text inside the box */
+        }
+        /* Styles for the "t" button */
+        #redirect-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none; /* Remove border */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Non-interactable box -->
+    <div id="non-interactable-box">
+        .-- - .... .-- .--. .... --.- - - -.-. .-- - .--. --. ...
+    </div>
+
+    <!-- Clickable "t" button -->
+    <div id="redirect-btn">t</div>
+
+    <script>
+        const redirectBtn = document.getElementById('redirect-btn');
+
+        // Redirect to a specified URL when the "t" button is clicked
+        redirectBtn.addEventListener('click', function() {
+            window.location.href = 'https://your-redirect-url.com'; // Replace with your desired URL
+        });
+    </script>
+</body>
+</html>
