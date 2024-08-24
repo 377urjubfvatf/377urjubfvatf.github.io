@@ -186,17 +186,25 @@
             output.textContent = `> ${command}`;
             outputDiv.appendChild(output);
 
-            // Handle commands
+            // Handle commands hehasbeenheard
             if (command.trim().toLowerCase() === 'hewhosings') {
                 window.location.href = 'https://377urjubfvatf.github.io/773-axatlltgz.html';
+
             } else if (command.trim().toLowerCase() === 'hehassang') {
-                const newCode_1 = document.createElement('div');
-                newCode_1.textContent = ' The decryption key is | 8 4 3';
-                outputDiv.appendChild(newCode_1);
+                const heHasSang = document.createElement('div');
+                heHasSang.textContent = 'The decryption key is | 8 4 3';
+                outputDiv.appendChild(heHasSang);
+
+            } else if (command.trim().toLowerCase() === 'hehasbeenheard') {
+                const heHasBeenHeard = document.createElement('div');
+                heHasBeenHeard.textContent = 'You Win for now evalyn...';
+                outputDiv.appendChild(heHasBeenHeard);
+
             } else if (command.trim().toLowerCase() === 'help') {
                 const helpMessage = document.createElement('div');
                 helpMessage.textContent = 'Something in the system is encrypted | -.-. .- . ... . .-. ';
                 outputDiv.appendChild(helpMessage);
+
             } else {
                 const error = document.createElement('div');
                 error.textContent = 'Unrecognized Cipher';
